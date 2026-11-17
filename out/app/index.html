@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>make.fun · live board</title>
+<meta name="description" content="The live make.fun bounty board: every open bounty with its pot, entry fee and time left, its leaderboard, and the accounts behind it.">
+<style>
+/* critical shell: the first load is this file alone; everything else arrives by import() */
+:root{--paper:#f4f1e7;--card:#fffdf6;--ink:#14130f;--muted:#6d6859;--line:#d9d3c1;--acid:#c8f24f;--hot:#d93d1f;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.5 var(--sans);display:flex;flex-direction:column}
+a{color:inherit}
+.top{display:flex;align-items:center;gap:14px;padding:10px 18px;border-bottom:1px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:9}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px;letter-spacing:-.02em;text-decoration:none}
+.brand i{width:18px;height:18px;border-radius:5px;background:var(--ink);box-shadow:inset 0 0 0 3px var(--acid)}
+.brand span{color:var(--muted);font-weight:600}
+.top nav{display:flex;gap:4px}
+.top nav a{padding:5px 10px;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted);text-decoration:none}
+.top nav a.on,.top nav a:hover{background:var(--ink);color:var(--paper)}
+.status{margin-left:auto;display:flex;align-items:center;gap:10px;font:12px/1 var(--mono);color:var(--muted)}
+.status button{font:inherit;background:none;border:1px solid var(--line);border-radius:8px;padding:6px 9px;color:var(--ink);cursor:pointer}
+.status button:hover{border-color:var(--ink)}
+main{flex:1;display:grid;grid-template-columns:390px minmax(0,1fr);min-height:0}
+#list{border-right:1px solid var(--line);overflow:auto;padding:0 0 40px}
+#pane{overflow:auto;padding:22px 26px 48px;min-width:0}
+.foot{padding:8px 18px;border-top:1px solid var(--line);font:11px/1.4 var(--mono);color:var(--muted)}
+.skel{padding:18px}
+.skel i{display:block;height:54px;margin-bottom:10px;border-radius:10px;background:linear-gradient(90deg,#e9e3d3,#f7f3e7,#e9e3d3);background-size:200% 100%;animation:sh 1.3s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+@media(max-width:900px){main{grid-template-columns:1fr}#list{border-right:0;border-bottom:1px solid var(--line)}#pane{padding:16px}}
+</style>
+<script type="module">
+  // Views, API and the full stylesheet arrive after this file, so the first load is one file.
+  window.__shotReady = false;
+  import('./main.js').then((m) => m.boot()).catch((err) => {
+    document.getElementById('pane').innerHTML = '<p>Failed to load: ' + String((err && err.message) || err) + '</p>';
+    window.__shotReady = true;
+  });
+</script>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#/"><i aria-hidden="true"></i>make.fun<span>/board</span></a>
+  <nav id="nav" aria-label="Sections">
+    <a href="#/" data-nav="board">Board</a>
+    <a href="#/leaderboards" data-nav="leaderboards">Leaderboards</a>
+    <a href="https://make.fun" rel="noopener">make.fun ↗</a>
+  </nav>
+  <div class="status"><span id="status">loading…</span><button id="refresh" type="button">Refresh</button></div>
+</header>
+<main>
+  <section id="list" aria-label="Bounties"><div class="skel"><i></i><i></i><i></i><i></i></div></section>
+  <section id="pane" aria-live="polite"><div class="skel"><i></i></div></section>
+</main>
+<footer class="foot" id="foot">static frontend on make.fun's public API</footer>
+</body>
+</html>
